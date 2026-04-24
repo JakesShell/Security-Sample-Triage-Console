@@ -1,8 +1,8 @@
-﻿# Threat Sample Review Client
+﻿# Security Sample Triage Console
 
 ## Overview
 
-Threat Sample Review Client is a Java-based internal security utility for reviewing submitted files and assigning a practical triage disposition based on lightweight risk signals.
+Security Sample Triage Console is a Java-based internal security utility for reviewing submitted files and assigning a practical triage disposition based on lightweight risk signals.
 
 This project is positioned as a recruiter-ready backend and security portfolio piece. It upgrades a rough malware-sandbox integration concept into a cleaner and more practical internal review workflow that better matches how teams triage suspicious samples before deeper investigation.
 
@@ -54,3 +54,4 @@ This tool is useful for triage demos, internal review prototypes, and portfolio 
 
 ```powershell
 mvn clean package
+

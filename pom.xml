@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.security</groupId>
-    <artifactId>threat-sample-review-client</artifactId>
+    <artifactId>security-sample-triage-console</artifactId>
     <version>1.0.0</version>
-    <name>Threat Sample Review Client</name>
+    <name>Security Sample Triage Console</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -36,3 +36,4 @@
         </plugins>
     </build>
 </project>
+
