@@ -1,17 +1,56 @@
-# Malware Analysis Sandbox
+﻿# Threat Sample Review Client
 
 ## Overview
 
-The **Malware Analysis Sandbox** project is a Java application designed to automate the process of malware analysis using the Cuckoo Sandbox. This tool allows security researchers and professionals to submit malware samples for automated analysis and retrieve detailed reports on their behavior, facilitating a deeper understanding of potential threats.
+Threat Sample Review Client is a Java-based internal security utility for reviewing submitted files and assigning a practical triage disposition based on lightweight risk signals.
+
+This project is positioned as a recruiter-ready backend and security portfolio piece. It upgrades a rough malware-sandbox integration concept into a cleaner and more practical internal review workflow that better matches how teams triage suspicious samples before deeper investigation.
+
+## Real-World Business Use Case
+
+This project maps to practical workflows used by:
+
+- Security Operations Teams
+- Threat Triage Analysts
+- Internal Review Queues
+- Security Engineering Teams
+- Technical Portfolio Demonstrations
+
+A team may need to answer questions such as:
+
+- Which submitted files should go straight to a sandbox queue?
+- Which files deserve manual analyst review first?
+- Which files can be archived for passive monitoring?
+- How can a simple internal review client summarize why a submission was flagged?
+
+This tool is useful for triage demos, internal review prototypes, and portfolio presentation of security-oriented Java applications.
 
 ## Key Features
 
-- **Automated Sample Submission**: Easily submit malware samples to Cuckoo Sandbox for analysis.
-- **Analysis Reporting**: Retrieve and display detailed analysis reports, including behavioral data and indicators of compromise.
-- **Configuration Management**: Use a properties file for easy configuration of API settings.
+- Sample Review Queue
+- Rule-Based Triage Logic
+- Escalate, Review, Or Archive Dispositions
+- Per-Sample Recommendation Output
+- Severity Summary Reporting
+- Maven Project Structure
 
-## Technologies Used
+## Tech Stack
 
-- **Java**: The primary programming language used for developing the application.
-- **Apache HttpClient**: For making HTTP requests to the Cuckoo Sandbox API.
-- **Jackson**: For handling JSON data and parsing responses.
+- Java 17
+- Maven
+
+## Repository Contents
+
+- `pom.xml`
+- `src/main/java/com/security/triage/Main.java`
+- `src/main/java/com/security/triage/SampleSubmission.java`
+- `src/main/java/com/security/triage/ReviewResult.java`
+- `src/main/java/com/security/triage/ThreatReviewEngine.java`
+- `README.md`
+
+## How To Run
+
+### Build
+
+```powershell
+mvn clean package
