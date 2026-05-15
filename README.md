@@ -1,10 +1,10 @@
-﻿# SentinelQueue Threat Sample Intake And Triage Console
+# SentinelQueue Threat Sample Intake And Triage Console
 
 ## Overview
 
 SentinelQueue is a simulated internal SOC intake and triage console for reviewing suspicious sample metadata, scoring risk, and routing submissions to the right analyst workflow.
 
-This project upgrades the original `Security-Sample-Triage-Console` into a more complete cloud-and-security portfolio system with a Java triage engine and a polished SOC-style frontend dashboard.
+This project upgrades the original `SentinelQueue-Threat-Sample-Intake-And-Triage-Console` into a more complete cloud-and-security portfolio system with a Java triage engine and a polished SOC-style frontend dashboard.
 
 The project is intentionally safe: it does not execute files, unpack samples, or perform real malware analysis. It uses simulated metadata and indicators to demonstrate how a security operations team could structure intake review decisions.
 
@@ -55,3 +55,25 @@ dashboard/styles.css
 dashboard/app.js
 screenshots/
 README.md
+
+## Project Summary
+
+SentinelQueue is an enterprise-style SOC workflow demo for threat sample intake, safe static file scanning, analyst triage, evidence tracking, and simulated sandbox routing.
+
+## What It Does
+
+- Uploads a real local file through the browser
+- Reads safe file details without executing the file
+- Detects file name, type, size, browser MIME type, SHA-256 hash, magic bytes, first-seen time, and last modified date
+- Scores the file using static risk indicators
+- Routes higher-risk files into a simulated sandbox queue
+- Shows analyst workflow pages for Intake, Analysis, Sandbox, Evidence, Reports, and Config
+- Preserves a safe demo boundary by never executing, unpacking, detonating, or opening suspicious files
+
+## Cloud And AI Direction
+
+This project supports the larger Cloud + AI operations portfolio direction by modeling how a cloud security team could route suspicious files into controlled analysis workflows, preserve evidence, and prepare future AI-assisted triage recommendations.
+
+## Safe Demo Boundary
+
+This portfolio version performs browser-side static file inspection only. It does not execute uploaded files, open macros, unpack suspicious archives, or detonate malware.
