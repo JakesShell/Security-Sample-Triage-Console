@@ -1,0 +1,634 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SentinelQueue | Threat Sample Intake & Triage Console</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="page-grid"></div>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="app-shell">
+        <header class="main-nav">
+            <div class="brand">
+                <div class="shield-logo">S</div>
+                <div>
+                    <strong>SENTINELQUEUE</strong>
+                    <span>Threat Sample Intake & Triage Console</span>
+                </div>
+            </div>
+
+            <nav class="top-nav">
+                <a class="active" data-page="command">Command Center</a>
+                <a data-page="intake">Intake</a>
+                <a data-page="analysis">Analysis</a>
+                <a data-page="sandbox">Sandbox</a>
+                <a data-page="evidence">Evidence</a>
+                <a data-page="reports">Reports</a>
+                <a data-page="config">Config</a>
+            </nav>
+
+            <div class="operator-zone">
+                <div class="status-pill"><i></i> Operational</div>
+                <div class="bell">⌁</div>
+                <div class="operator">
+                    <div class="operator-photo">AR</div>
+                    <div>
+                        <strong>SOC Analyst</strong>
+                        <span>Senior Analyst</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="nav-page page-hidden" id="page-intake">
+            <div class="page-hero small-page-hero">
+                <p class="eyebrow blue-text">Intake</p>
+                <h2>Upload a file and let SentinelQueue detect the details automatically.</h2>
+                <p>The system reads safe static file details only: file name, type, size, browser MIME type, SHA-256 hash, magic bytes, first-seen time, and last modified date.</p>
+            </div>
+
+            <div class="page-grid-two">
+                <article class="page-card">
+                    <h3>What happens here</h3>
+                    <ol>
+                        <li>Upload a real file.</li>
+                        <li>SentinelQueue reads safe file details.</li>
+                        <li>The file is scored for static risk indicators.</li>
+                        <li>A sandbox routing record is created.</li>
+                    </ol>
+                </article>
+
+                <article class="page-card">
+                    <h3>Current file record</h3>
+                    <dl class="mini-dl">
+                        <dt>File</dt><dd id="navIntakeFile">No file selected yet</dd>
+                        <dt>Type</dt><dd id="navIntakeType">Waiting for upload</dd>
+                        <dt>Size</dt><dd id="navIntakeSize">Waiting for upload</dd>
+                        <dt>SHA-256</dt><dd id="navIntakeHash">Waiting for upload</dd>
+                        <dt>Status</dt><dd id="navIntakeStatus">Ready for file upload</dd>
+                    </dl>
+                </article>
+            </div>
+        </section>
+
+        <section class="nav-page page-hidden" id="page-analysis">
+            <div class="page-hero small-page-hero">
+                <p class="eyebrow red-text">Analysis</p>
+                <h2>Review the risk score and the reason the file was flagged.</h2>
+                <p>This page explains whether the file should be archived, monitored, routed to sandbox, or escalated.</p>
+            </div>
+
+            <div class="analysis-layout">
+                <article class="page-card">
+                    <h3>Current risk score</h3>
+                    <div class="big-score-mini">
+                        <strong id="navAnalysisScore">--</strong>
+                        <span id="navAnalysisSeverity">Waiting</span>
+                    </div>
+                    <p id="navAnalysisReason">Upload and scan a file to generate the analysis.</p>
+                </article>
+
+                <article class="page-card">
+                    <h3>Risk reasons</h3>
+                    <div class="risk-hints" id="navAnalysisHints">
+                        <span>Waiting for file scan</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="nav-page page-hidden" id="page-sandbox">
+            <div class="page-hero small-page-hero sandbox-hero">
+                <p class="eyebrow amber-text">Sandbox</p>
+                <h2>Automatic sandbox routing is active.</h2>
+                <p>When a file is uploaded and scanned, SentinelQueue creates a simulated isolated sandbox routing record. This demo does not execute files.</p>
+            </div>
+
+            <div class="sandbox-grid">
+                <article class="page-card sandbox-status-card">
+                    <div class="sandbox-core">
+                        <div class="sandbox-cube">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <h3 id="sandboxStatusTitle">Waiting for uploaded file</h3>
+                    <p id="sandboxStatusText">Upload and scan a file from the Command Center.</p>
+                    <div class="sandbox-progress"><i id="sandboxProgressBar"></i></div>
+                </article>
+
+                <article class="page-card">
+                    <h3>Sandbox routing record</h3>
+                    <dl class="mini-dl">
+                        <dt>File</dt><dd id="sandboxFileName">No file selected</dd>
+                        <dt>SHA-256</dt><dd id="sandboxHash">Waiting for upload</dd>
+                        <dt>Environment</dt><dd>Simulated isolated Windows analysis VM</dd>
+                        <dt>Network</dt><dd>Restricted demo network</dd>
+                        <dt>Execution</dt><dd>Disabled for portfolio safety</dd>
+                        <dt>Queue</dt><dd id="sandboxQueue">Waiting</dd>
+                        <dt>Result</dt><dd id="sandboxResult">No sandbox record yet</dd>
+                    </dl>
+                </article>
+
+                <article class="page-card">
+                    <h3>Plain English</h3>
+                    <p>The sandbox page shows that the file was safely routed for controlled analysis. In this portfolio version, the file is never executed. It only creates the operational routing record.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="nav-page page-hidden" id="page-evidence">
+            <div class="page-hero small-page-hero">
+                <p class="eyebrow amber-text">Evidence</p>
+                <h2>Confirm the file record and chain of custody.</h2>
+                <p>This page shows what was captured during upload and scan.</p>
+            </div>
+
+            <div class="page-grid-two">
+                <article class="page-card">
+                    <h3>Evidence checklist</h3>
+                    <ul class="check-list">
+                        <li>File name captured</li>
+                        <li>File size captured</li>
+                        <li>SHA-256 hash calculated</li>
+                        <li>Magic bytes recorded</li>
+                        <li>First-seen timestamp created</li>
+                        <li>Sandbox route recorded</li>
+                    </ul>
+                </article>
+
+                <article class="page-card">
+                    <h3>Current evidence file</h3>
+                    <dl class="mini-dl">
+                        <dt>File</dt><dd id="navEvidenceFile">No file selected yet</dd>
+                        <dt>Type</dt><dd id="navEvidenceType">Waiting for upload</dd>
+                        <dt>Hash</dt><dd id="navEvidenceHash">Waiting for upload</dd>
+                        <dt>Magic Bytes</dt><dd id="navEvidenceMagic">Waiting for upload</dd>
+                    </dl>
+                </article>
+            </div>
+        </section>
+
+        <section class="nav-page page-hidden" id="page-reports">
+            <div class="page-hero small-page-hero">
+                <p class="eyebrow green-text">Reports</p>
+                <h2>Turn the triage decision into an executive SOC summary.</h2>
+                <p>This report explains what file was scanned, what risk was found, and where it was routed.</p>
+            </div>
+
+            <div class="page-grid-two">
+                <article class="page-card">
+                    <h3>Report summary</h3>
+                    <p id="reportSummary">No uploaded file report yet. Upload and scan a file to generate a summary.</p>
+                </article>
+
+                <article class="page-card">
+                    <h3>Export-ready sections</h3>
+                    <ul class="check-list">
+                        <li>Executive summary</li>
+                        <li>Risk score</li>
+                        <li>Evidence record</li>
+                        <li>Sandbox routing status</li>
+                        <li>Analyst decision</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section class="nav-page page-hidden" id="page-config">
+            <div class="page-hero small-page-hero">
+                <p class="eyebrow purple-text">Config</p>
+                <h2>Control routing rules and review thresholds.</h2>
+                <p>This page shows how a real SOC team would tune SentinelQueue.</p>
+            </div>
+
+            <div class="page-grid-two">
+                <article class="page-card">
+                    <h3>Routing rules</h3>
+                    <dl class="mini-dl">
+                        <dt>Auto Sandbox Routing</dt><dd>Enabled</dd>
+                        <dt>Critical Threshold</dt><dd>75+</dd>
+                        <dt>Manual Review Threshold</dt><dd>50+</dd>
+                        <dt>Monitor Threshold</dt><dd>25+</dd>
+                        <dt>Archive Threshold</dt><dd>Below 25</dd>
+                    </dl>
+                </article>
+
+                <article class="page-card">
+                    <h3>Safe demo boundary</h3>
+                    <p>SentinelQueue reads local file details in the browser and simulates sandbox routing. It does not execute files, open macros, or detonate malware.</p>
+                </article>
+            </div>
+        </section>
+
+
+
+        <section class="mission-hero cinematic-globe-hero">
+            <img
+                src="./assets/sentinelqueue-cyber-globe-hero.png"
+                alt="SentinelQueue cyber globe threat command center"
+                class="cinematic-hero-image"
+            >
+        </section>
+
+        <section class="stats-row">
+            <article>
+                <div class="stat-icon stack"></div>
+                <span>Total Samples</span>
+                <strong id="totalSamples">4</strong>
+                <small>Registered in queue</small>
+            </article>
+
+            <article>
+                <div class="stat-icon critical"></div>
+                <span>Critical</span>
+                <strong id="criticalCount">2</strong>
+                <small>Requires immediate review</small>
+            </article>
+
+            <article>
+                <div class="stat-icon search"></div>
+                <span>Needs Review</span>
+                <strong id="reviewCount">3</strong>
+                <small>Analyst action required</small>
+            </article>
+
+            <article>
+                <div class="stat-icon archive"></div>
+                <span>Archived</span>
+                <strong id="archiveCount">1</strong>
+                <small>Passive monitoring</small>
+            </article>
+
+            <article>
+                <div class="stat-icon shield"></div>
+                <span>Evidence Quality</span>
+                <strong>96%</strong>
+                <small>Chain of custody ready</small>
+            </article>
+
+            <article>
+                <div class="stat-icon clock"></div>
+                <span>Mean Time To Triage</span>
+                <strong>18m 42s</strong>
+                <small>↓ 24% vs yesterday</small>
+            </article>
+        </section>
+
+        <section class="step-ribbon">
+            <article class="step-card blue active">
+                <b>1</b>
+                <div>
+                    <strong>Step 1: Upload File</strong>
+                    <p>Start here: enter sample details and submit.</p>
+                </div>
+            </article>
+
+            <article class="step-card red">
+                <b>2</b>
+                <div>
+                    <strong>Step 2: Review Risk Score</strong>
+                    <p>Next: review the score and why it looks risky.</p>
+                </div>
+            </article>
+
+            <article class="step-card amber">
+                <b>3</b>
+                <div>
+                    <strong>Step 3: Check Evidence</strong>
+                    <p>Then: confirm where the sample came from and what was saved.</p>
+                </div>
+            </article>
+
+            <article class="step-card green">
+                <b>4</b>
+                <div>
+                    <strong>Step 4: Choose Action</strong>
+                    <p>Now choose what to do: monitor, archive, escalate, or sandbox.</p>
+                </div>
+            </article>
+
+            <article class="step-card purple">
+                <b>5</b>
+                <div>
+                    <strong>Step 5: Route Or Escalate</strong>
+                    <p>Finish by assigning the next step and saving notes.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="workflow-grid">
+            <article class="workflow-panel step-one">
+                <p class="eyebrow blue-text">Step 1</p>
+                <h2>Upload File</h2>
+                <p class="plain">Start here. Upload a file. SentinelQueue will read the safe file details and score the risk.</p>
+
+                <form id="sampleForm" class="intake-form">
+                    <div class="drop-zone" id="dropZone">
+                        <input id="realFileInput" type="file" hidden>
+                        <div class="upload-icon">⇧</div>
+                        <strong id="dropTitle">Drag & drop a real file here</strong>
+                        <span>or</span>
+                        <button id="selectFilesButton" type="button">Select File</button>
+                        <small>Safe static scan only · no execution · no macro opening</small>
+                        <div class="file-readout" id="fileReadout">No file selected yet.</div>
+                    </div>
+
+                    <div class="auto-file-panel" id="autoFilePanel">
+                        <div class="auto-panel-title">
+                            <strong>File Details Detected Automatically</strong>
+                            <span id="autoStatus">Waiting for upload</span>
+                        </div>
+
+                        <dl>
+                            <dt>File Name</dt><dd id="pName">No file selected</dd>
+                            <dt>Detected Type</dt><dd id="pType">Not scanned yet</dd>
+                            <dt>Browser MIME</dt><dd id="pMime">Not available yet</dd>
+                            <dt>File Size</dt><dd id="pSize">Not available yet</dd>
+                            <dt>First Seen In SentinelQueue</dt><dd id="pFirstSeen">Not available yet</dd>
+                            <dt>Last Modified</dt><dd id="pLastModified">Not available yet</dd>
+                            <dt>Original Created Date</dt><dd id="pCreated">Browser upload cannot read this safely</dd>
+                            <dt>SHA-256</dt><dd id="pHash">Not calculated yet</dd>
+                            <dt>Magic Bytes</dt><dd id="pMagic">Not calculated yet</dd>
+                        </dl>
+
+                        <div class="risk-hints" id="pRiskHints">
+                            Upload a file to see risk hints.
+                        </div>
+                    </div>
+
+                    <label>
+                        Where Did It Come From?
+                        <select id="sourceChannel">
+                            <option>External Email Gateway</option>
+                            <option>IT Service Desk</option>
+                            <option>HR Portal</option>
+                            <option>Cloud Storage Intake</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Detected File Type
+                        <select id="fileType">
+                            <option>Macro Document (.xlsm)</option>
+                            <option>Executable (.exe)</option>
+                            <option>PDF Document (.pdf)</option>
+                            <option>Archive (.zip)</option>
+                            <option>Script (.ps1)</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Detected File Name
+                        <input id="fileName" type="text" value="invoice-update.xlsm">
+                    </label>
+
+                    <div class="parse-options">
+                        <span>Safety Checks</span>
+                        <label><input id="macroEnabled" type="checkbox" checked> Check macro risk</label>
+                        <label><input id="suspiciousName" type="checkbox" checked> Check filename risk</label>
+                        <label><input id="externalSource" type="checkbox" checked> Mark external source</label>
+                        <label><input id="unsigned" type="checkbox" checked> Hash + magic bytes</label>
+                    </div>
+
+                    <button type="submit" class="submit-button">Submit For Triage <span>›</span></button>
+                </form>
+
+                <div class="tip-card">
+                    <strong>Tip</strong>
+                    <p>Provide as much context as you can. It improves detection accuracy.</p>
+                </div>
+            </article>
+
+            <article class="workflow-panel step-two">
+                <p class="eyebrow red-text">Step 2</p>
+                <h2>Review Risk Score</h2>
+                <p class="plain">Next, check the score. A higher score means the sample needs faster attention.</p>
+
+                <div class="risk-score-block">
+                    <div class="score-dial" id="scoreDial">
+                        <strong id="scoreNumber">91</strong>
+                        <span>Risk Score</span>
+                        <small id="scoreSeverity">Critical</small>
+                    </div>
+                </div>
+
+                <div class="risk-factors">
+                    <h3>Risk Factors</h3>
+                    <div><span>Malicious Indicators</span><b id="factorMalicious">92</b><i style="--w:92%"></i></div>
+                    <div><span>Macro Behavior</span><b id="factorMacro">89</b><i style="--w:89%"></i></div>
+                    <div><span>File Reputation</span><b id="factorReputation">76</b><i style="--w:76%"></i></div>
+                    <div><span>Behavioral Heuristics</span><b id="factorBehavior">93</b><i style="--w:93%"></i></div>
+                    <div><span>Threat Intel Matching</span><b id="factorIntel">88</b><i style="--w:88%"></i></div>
+                </div>
+
+                <div class="score-chart">
+                    <span>Risk Score Over Time</span>
+                    <svg viewBox="0 0 320 120" preserveAspectRatio="none">
+                        <polyline points="0,105 35,82 70,65 105,62 140,42 175,28 210,55 245,67 280,46 320,32"></polyline>
+                    </svg>
+                    <b id="chartBadge">91</b>
+                </div>
+
+                <div class="classification-box">
+                    <span>Classification</span>
+                    <strong id="classification">Malicious</strong>
+                    <span>Confidence</span>
+                    <strong class="green-text">High (96%)</strong>
+                    <span>Recommendation</span>
+                    <strong class="green-text">Immediate Analysis</strong>
+                </div>
+
+                <div class="tip-card red-tip">
+                    <strong>Tip</strong>
+                    <p>A higher score means higher risk. Review the top reasons above.</p>
+                </div>
+            </article>
+
+            <article class="workflow-panel step-three">
+                <p class="eyebrow amber-text">Step 3</p>
+                <h2>Check Evidence</h2>
+                <p class="plain">Then confirm where the sample came from and what evidence was saved.</p>
+
+                <div class="evidence-card">
+                    <h3>File Evidence</h3>
+                    <dl>
+                        <dt>Source</dt><dd id="eSource">Waiting for upload</dd>
+                        <dt>File Name</dt><dd id="eFile">No file selected</dd>
+                        <dt>Detected Type</dt><dd id="eType">Waiting for scan</dd>
+                        <dt>Browser MIME</dt><dd id="eMime">Waiting for scan</dd>
+                        <dt>File Size</dt><dd id="eSize">Waiting for scan</dd>
+                        <dt>First Seen</dt><dd id="eFirstSeen">Waiting for scan</dd>
+                        <dt>Last Modified</dt><dd id="eLastModified">Waiting for scan</dd>
+                        <dt>Created</dt><dd id="eCreated">Browser upload cannot safely read this</dd>
+                        <dt>SHA-256</dt><dd id="eHash">Waiting for scan</dd>
+                        <dt>Magic Bytes</dt><dd id="eMagic">Waiting for scan</dd>
+                        <dt>Chain Of Custody</dt><dd>96% Complete</dd>
+                    </dl>
+                </div>
+
+                <div class="evidence-items">
+                    <h3>Evidence Items</h3>
+                    <div><span>Original File</span><b>Saved</b></div>
+                    <div><span>Extracted Macros</span><b>Saved</b></div>
+                    <div><span>Static Analysis Report</span><b>Saved</b></div>
+                    <div><span>YARA Scan Results</span><b>Saved</b></div>
+                </div>
+
+                <div class="tip-card amber-tip">
+                    <strong>Tip</strong>
+                    <p>Make sure all evidence is saved and the chain of custody is complete.</p>
+                </div>
+            </article>
+
+            <article class="workflow-panel step-four">
+                <p class="eyebrow green-text">Step 4</p>
+                <h2>Choose Action</h2>
+                <p class="plain">Now pick what happens next. Choose the safest action for the risk level.</p>
+
+                <div class="recommended-action">
+                    <h3>Recommended Action</h3>
+                    <div class="action-alert">
+                        <strong id="recommendedTitle">Immediate Analysis</strong>
+                        <p id="recommendedText">High risk detected. Recommend further dynamic analysis.</p>
+                    </div>
+                </div>
+
+                <div class="action-list">
+                    <h3>Select Action</h3>
+                    <button class="action-option green selected" data-action="Route To Sandbox">
+                        <b>Route To Sandbox</b>
+                        <span>Run controlled analysis in isolated environment.</span>
+                    </button>
+
+                    <button class="action-option red" data-action="Escalate">
+                        <b>Escalate</b>
+                        <span>Escalate to senior analyst for immediate review.</span>
+                    </button>
+
+                    <button class="action-option amber" data-action="Monitor">
+                        <b>Monitor</b>
+                        <span>Passive monitoring and watch for activity.</span>
+                    </button>
+
+                    <button class="action-option blue" data-action="Archive">
+                        <b>Archive</b>
+                        <span>Archive sample for future reference.</span>
+                    </button>
+                </div>
+
+                <div class="tip-card green-tip">
+                    <strong>Tip</strong>
+                    <p>Choose the action that best matches the risk and context.</p>
+                </div>
+            </article>
+
+            <article class="workflow-panel step-five">
+                <p class="eyebrow purple-text">Step 5</p>
+                <h2>Route Or Escalate</h2>
+                <p class="plain">Finish by assigning the next owner, queue, deadline, and notes.</p>
+
+                <div class="route-form">
+                    <label>
+                        Priority
+                        <select id="prioritySelect">
+                            <option>Critical</option>
+                            <option>High</option>
+                            <option>Medium</option>
+                            <option>Low</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Assign To
+                        <div class="assignee-card">
+                            <div class="operator-photo">AR</div>
+                            <div>
+                                <strong>Alex Rodriguez</strong>
+                                <span>Threat Intelligence Lead</span>
+                            </div>
+                            <b>›</b>
+                        </div>
+                    </label>
+
+                    <label>
+                        Queue
+                        <select id="queueSelect">
+                            <option>Critical Queue</option>
+                            <option>Sandbox Priority Queue</option>
+                            <option>Analyst Review Queue</option>
+                            <option>Passive Archive</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Due Time
+                        <select>
+                            <option>2 hours</option>
+                            <option>Today</option>
+                            <option>24 hours</option>
+                            <option>This week</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Notes
+                        <textarea id="analystNotes" placeholder="Add notes, observations, or investigation details..."></textarea>
+                    </label>
+
+                    <button class="save-route">Save & Route <span>›</span></button>
+                </div>
+
+                <div class="tip-card purple-tip">
+                    <strong>Tip</strong>
+                    <p>Clear notes and ownership help the team move faster.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="process-strip">
+            <p class="eyebrow">How The Process Works</p>
+            <div class="process-flow">
+                <article><b>1</b><strong>Upload File</strong><span>Upload a real file for safe static analysis.</span></article>
+                <i></i>
+                <article><b>2</b><strong>Review Risk Score</strong><span>See the score and the risk reasons.</span></article>
+                <i></i>
+                <article><b>3</b><strong>Check Evidence</strong><span>Confirm file details, hash, size, and timestamps.</span></article>
+                <i></i>
+                <article><b>4</b><strong>Choose Action</strong><span>Choose archive, monitor, sandbox, or escalate.</span></article>
+                <i></i>
+                <article><b>5</b><strong>Route Or Escalate</strong><span>Assign an owner and save the decision.</span></article>
+            </div>
+        </section>
+
+        <section class="testimonial">
+            <div class="quote-mark">“</div>
+            <p>
+                SentinelQueue turns suspicious sample intake into a simple step-by-step workflow.
+                Analysts know exactly what to review, what evidence exists, and what to do next.
+            </p>
+            <div class="testimonial-person">
+                <div class="operator-photo">AR</div>
+                <div>
+                    <strong>Alex Rodriguez</strong>
+                    <span>Threat Intelligence Lead · Cloud Retail SOC</span>
+                </div>
+            </div>
+            <div class="stars">★★★★★</div>
+        </section>
+
+        <footer class="footer-status">
+            <div><i></i><span>System Status</span><strong>All Systems Operational</strong></div>
+            <div><span>Version</span><strong>2.4.1</strong></div>
+            <div><span>Last Update</span><strong>14:24:10 UTC</strong></div>
+            <div><span>Data Classification</span><strong>Confidential</strong></div>
+            <div><span>Encryption</span><strong>AES-256</strong></div>
+        </footer>
+    </main>
+
+    <script src="./app.js"></script>
+</body>
+</html>
