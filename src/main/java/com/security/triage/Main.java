@@ -1,78 +1,119 @@
 package com.security.triage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-
     public static void main(String[] args) {
-        List<SampleSubmission> submissions = buildSampleQueue();
         ThreatReviewEngine engine = new ThreatReviewEngine();
 
-        int low = 0;
-        int medium = 0;
-        int high = 0;
-
-        System.out.println("Threat Sample Review Client");
-        System.out.println("Reviewing Submitted Samples");
-        System.out.println();
-
-        System.out.printf(
-                "%-22s %-18s %-8s %-10s %-10s %-8s %-8s %-10s %-14s%n",
-                "Sample",
-                "Source Team",
-                "Type",
-                "RepScore",
-                "BehScore",
-                "Signed",
-                "Macros",
-                "NetIOC",
-                "Severity"
+        List<SampleSubmission> submissions = List.of(
+                new SampleSubmission(
+                        "SQ-1041",
+                        "invoice-update.xlsm",
+                        "Macro Document",
+                        "External Email Gateway",
+                        "Finance",
+                        7,
+                        9,
+                        false,
+                        false,
+                        true,
+                        true,
+                        true,
+                        true,
+                        List.of("External sender", "Macro-enabled metadata", "Low prevalence")
+                ),
+                new SampleSubmission(
+                        "SQ-1042",
+                        "vpn-client-patch.exe",
+                        "Executable",
+                        "IT Service Desk",
+                        "Infrastructure",
+                        62,
+                        74,
+                        true,
+                        true,
+                        false,
+                        false,
+                        false,
+                        false,
+                        List.of("Signed vendor package", "Known deployment channel")
+                ),
+                new SampleSubmission(
+                        "SQ-1043",
+                        "q4-benefits-review.pdf",
+                        "Document",
+                        "HR Portal",
+                        "Human Resources",
+                        44,
+                        51,
+                        true,
+                        true,
+                        false,
+                        false,
+                        false,
+                        false,
+                        List.of("Known internal submission source", "Expected business context")
+                ),
+                new SampleSubmission(
+                        "SQ-1044",
+                        "client-payment-confirmation.scr",
+                        "Screen Saver Binary",
+                        "External Email Gateway",
+                        "Accounts Receivable",
+                        3,
+                        6,
+                        false,
+                        false,
+                        true,
+                        false,
+                        true,
+                        true,
+                        List.of("Unexpected executable-like extension", "External source", "Low reputation")
+                )
         );
-        System.out.println("----------------------------------------------------------------------------------------------------------------");
 
-        for (SampleSubmission sample : submissions) {
-            ReviewResult result = engine.review(sample);
+        System.out.println();
+        System.out.println("SentinelQueue Threat Sample Intake And Triage Console");
+        System.out.println("Simulation mode: metadata-only portfolio triage. No files are executed.");
+        System.out.println("-----------------------------------------------------------------------");
 
-            System.out.printf(
-                    "%-22s %-18s %-8s %-10d %-10d %-8s %-8s %-10d %-14s%n",
-                    sample.getSampleName(),
-                    sample.getSourceTeam(),
-                    sample.getFileType(),
-                    sample.getReputationScore(),
-                    sample.getBehaviorScore(),
-                    sample.isSignedFile() ? "Yes" : "No",
-                    sample.isMacroEnabled() ? "Yes" : "No",
-                    sample.getNetworkIndicators(),
-                    result.getSeverity()
-            );
-            System.out.println("Disposition: " + result.getDisposition());
-            System.out.println("Recommendation: " + result.getRecommendation());
-            System.out.println();
+        int critical = 0;
+        int high = 0;
+        int review = 0;
 
-            switch (result.getSeverity()) {
-                case "High" -> high++;
-                case "Medium" -> medium++;
-                default -> low++;
+        for (SampleSubmission submission : submissions) {
+            ReviewResult result = engine.review(submission);
+
+            if ("Critical".equals(result.getSeverity())) {
+                critical++;
             }
+
+            if ("High".equals(result.getSeverity())) {
+                high++;
+            }
+
+            if (!"Archive".equals(result.getDisposition())) {
+                review++;
+            }
+
+            System.out.printf("%s | %-30s | Risk: %3d | %-8s | %-18s | %s%n",
+                    result.getSampleId(),
+                    result.getFileName(),
+                    result.getRiskScore(),
+                    result.getSeverity(),
+                    result.getDisposition(),
+                    result.getQueue()
+            );
         }
 
-        System.out.println("Summary");
-        System.out.println("-------");
-        System.out.println("Low Severity Samples: " + low);
-        System.out.println("Medium Severity Samples: " + medium);
-        System.out.println("High Severity Samples: " + high);
-    }
-
-    private static List<SampleSubmission> buildSampleQueue() {
-        List<SampleSubmission> submissions = new ArrayList<>();
-
-        submissions.add(new SampleSubmission("invoice_viewer.docm", "Finance", "docm", 82, 41, false, true, 2));
-        submissions.add(new SampleSubmission("partner_report.pdf", "Legal", "pdf", 12, 8, true, false, 0));
-        submissions.add(new SampleSubmission("agent_update.exe", "Support", "exe", 90, 76, false, false, 7));
-        submissions.add(new SampleSubmission("brand_assets.zip", "Marketing", "zip", 28, 18, true, false, 1));
-        submissions.add(new SampleSubmission("macro_template.xlsm", "Operations", "xlsm", 55, 48, false, true, 4));
-
-        return submissions;
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.printf("Critical: %d | High: %d | Needs Review: %d | Total Samples: %d%n",
+                critical,
+                high,
+                review,
+                submissions.size()
+        );
+        System.out.println();
     }
 }

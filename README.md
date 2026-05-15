@@ -1,59 +1,57 @@
-﻿# Security Sample Triage Console
+﻿# SentinelQueue Threat Sample Intake And Triage Console
 
 ## Overview
 
-Security Sample Triage Console is a Java-based internal security utility for reviewing submitted files and assigning a practical triage disposition based on lightweight risk signals.
+SentinelQueue is a simulated internal SOC intake and triage console for reviewing suspicious sample metadata, scoring risk, and routing submissions to the right analyst workflow.
 
-This project is positioned as a recruiter-ready backend and security portfolio piece. It upgrades a rough malware-sandbox integration concept into a cleaner and more practical internal review workflow that better matches how teams triage suspicious samples before deeper investigation.
+This project upgrades the original `Security-Sample-Triage-Console` into a more complete cloud-and-security portfolio system with a Java triage engine and a polished SOC-style frontend dashboard.
 
-## Real-World Business Use Case
+The project is intentionally safe: it does not execute files, unpack samples, or perform real malware analysis. It uses simulated metadata and indicators to demonstrate how a security operations team could structure intake review decisions.
 
-This project maps to practical workflows used by:
+## Real-World Relevance
 
-- Security Operations Teams
-- Threat Triage Analysts
-- Internal Review Queues
-- Security Engineering Teams
-- Technical Portfolio Demonstrations
+Security teams often need to quickly decide whether a suspicious file submission should be escalated, manually reviewed, monitored, or archived. SentinelQueue models that decision process with:
 
-A team may need to answer questions such as:
+- Metadata-Based Sample Intake
+- Rule-Based Triage Scoring
+- Analyst Queue Routing
+- Evidence Indicator Cards
+- Chain-Of-Custody Timeline
+- Executive SOC Summary
+- Premium Dashboard For Portfolio Presentation
 
-- Which submitted files should go straight to a sandbox queue?
-- Which files deserve manual analyst review first?
-- Which files can be archived for passive monitoring?
-- How can a simple internal review client summarize why a submission was flagged?
+## Cloud + AI Direction
 
-This tool is useful for triage demos, internal review prototypes, and portfolio presentation of security-oriented Java applications.
+SentinelQueue is designed to connect naturally to future cloud and AI workflows:
 
-## Key Features
+- Cloud Storage Intake Queues
+- Serverless Triage Workers
+- SIEM/SOAR Case Creation
+- Sandbox API Routing
+- AI-Assisted Analyst Summaries
+- Evidence And Chain-Of-Custody Reporting
+- Threat Intelligence Enrichment
 
-- Sample Review Queue
-- Rule-Based Triage Logic
-- Escalate, Review, Or Archive Dispositions
-- Per-Sample Recommendation Output
-- Severity Summary Reporting
-- Maven Project Structure
+This version is a safe portfolio simulation and does not claim production deployment.
 
 ## Tech Stack
 
 - Java 17
 - Maven
+- HTML
+- CSS
+- JavaScript
 
-## Repository Contents
+## Project Structure
 
-- `pom.xml`
-- `src/main/java/com/security/triage/Main.java`
-- `src/main/java/com/security/triage/SampleSubmission.java`
-- `src/main/java/com/security/triage/ReviewResult.java`
-- `src/main/java/com/security/triage/ThreatReviewEngine.java`
-- `README.md`
-
-## How To Run
-
-### Build
-
-```powershell
-mvn clean package
-
-
-
+```text
+pom.xml
+src/main/java/com/security/triage/Main.java
+src/main/java/com/security/triage/SampleSubmission.java
+src/main/java/com/security/triage/ReviewResult.java
+src/main/java/com/security/triage/ThreatReviewEngine.java
+dashboard/index.html
+dashboard/styles.css
+dashboard/app.js
+screenshots/
+README.md
